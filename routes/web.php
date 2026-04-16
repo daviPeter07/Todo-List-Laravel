@@ -11,5 +11,11 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+    //rota fora do padrao crud
+    Route::patch('tasks/reorder', [TaskController::class, 'reorder'])
+        ->name('tasks.reorder');
+
+    //resource dos metodos CRUD
+    Route::resource('tasks', TaskController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 });
