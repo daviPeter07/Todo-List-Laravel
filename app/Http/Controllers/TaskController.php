@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReorderTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
@@ -95,8 +96,35 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    //mesma coisa do update so que usa metodo delete do eloquent
+    public function destroy(Task $task): RedirectResponse
     {
-        //
+        abort_unless($task->user_id === Auth::id(), 403);
+
+        $task->delete();
+
+        return back();
+    }
+
+    //validacao form request
+    public function reorder(ReorderTaskRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        /*
+        ver lista do front
+        pegando task do user autenticado
+        ao inves de query Task::where(...)
+        */
+        foreach ($validated['tasks'] as $taskData) {
+            Auth::user()
+                ->tasks()
+                ->where('id', $taskData['id'])
+                ->update([
+                    'position' => $taskData['position'],
+                ]);
+        }
+
+        return back();
     }
 }
