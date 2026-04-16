@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth; // facade para acessar user autenticado
 use Inertia\Inertia;
@@ -37,21 +38,11 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    //objeto vindo da classe StoreTaskRequest e instancia dentro de $request
+    public function store(StoreTaskRequest $request): RedirectResponse
     {
-        /*
-        metodo validate q vem de request
-        schema de validacao,
-        titulo é obrigatorio, tem q ser string no max 255 caracteres
-        desc pode ser null, tem q ser string
-        status pode ser null, string e deve ser pendente ou completo
-        */
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status' => ['nullable', 'string', 'in:pending,completed'],
-        ]);
 
+        $validated = $request->validated();
         //acessao a ultima posicao e incrementando quando adicionamos mais uma tarefa
         $nextPosition = Auth::user()
             ->tasks()
@@ -65,6 +56,7 @@ class TaskController extends Controller
             'position' => $nextPosition,
         ]);
 
+        //redireciona para a page anterior
         return back();
     }
 
@@ -87,9 +79,17 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    //Route Model Binding, laravel pega id da tarefa e validacao da request
+    public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
-        //
+        //se o user_id da tarefa for diferente do id logado retorna forbidden e interrompe
+        abort_unless($task->user_id === Auth::id(), 403);
+
+        //eloquent atualiza linha do banco e retorna dados validados
+        $task->update($request->validated());
+
+        //redireciona para a page anterior
+        return back();
     }
 
     /**
