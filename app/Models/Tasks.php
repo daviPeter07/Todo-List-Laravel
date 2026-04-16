@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Task extends Model
+class Tasks extends Model
 {
     //define quais campos vao ser preenchidos
     protected $fillable = [

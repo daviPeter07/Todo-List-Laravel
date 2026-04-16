@@ -1,14 +1,15 @@
 <?php
 
+use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 
-Route::inertia('/', 'Welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+Route::get('/', function () {
+    return Auth::check()
+        ? to_route('tasks.index')
+        : to_route('login');
+})->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
 });
-
-require __DIR__.'/settings.php';
