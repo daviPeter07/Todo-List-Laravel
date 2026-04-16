@@ -23,7 +23,7 @@ class TaskController extends Controller
             ->orderBy('position')
             ->get();
 
-        return Inertia::render('tasks/Index', [
+        return Inertia::render('task/Index', [
             'tasks' => $tasks,
         ]);
     }

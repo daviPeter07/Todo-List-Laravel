@@ -36,6 +36,6 @@ class User extends Authenticatable
     //relacionamento do eloquent de 1 para muitos, um user tem varias tarefas
     public function tasks(): HasMany
     {
-        return $this->hasMany(Tasks::class);
+        return $this->hasMany(Task::class);
     }
 }

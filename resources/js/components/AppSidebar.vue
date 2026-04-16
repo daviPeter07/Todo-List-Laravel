@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import type { NavItem } from '@/types';
 
-const tasksUrl = '/tasks';
+const tasksUrl = '/task';
 
 const mainNavItems: NavItem[] = [
     {

@@ -6,16 +6,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return Auth::check()
-        ? to_route('tasks.index')
+        ? to_route('task.index')
         : to_route('login');
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    //rota fora do padrao crud
-    Route::patch('tasks/reorder', [TaskController::class, 'reorder'])
-        ->name('tasks.reorder');
+    // rota fora do padrao crud
+    Route::patch('task/reorder', [TaskController::class, 'reorder'])
+        ->name('task.reorder');
 
-    //resource dos metodos CRUD
-    Route::resource('tasks', TaskController::class)
+    // resource dos metodos CRUD
+    Route::resource('task', TaskController::class)
         ->only(['index', 'store', 'update', 'destroy']);
 });
