@@ -12,30 +12,36 @@ defineEmits<{
     <div class="flex items-center gap-2">
         <button
             type="button"
+            aria-label="Visualizar tarefa"
             class="rounded-md border p-2 transition hover:bg-muted"
             @click="$emit('view')"
         >
             <Eye class="h-4 w-4" />
         </button>
+
         <button
             type="button"
+            aria-label="Editar tarefa"
             class="rounded-md border p-2 transition hover:bg-muted"
             @click="$emit('edit')"
         >
             <Pencil class="h-4 w-4" />
         </button>
+
         <button
             type="button"
+            aria-label="Excluir tarefa"
             class="rounded-md border p-2 transition hover:bg-muted"
             @click="$emit('remove')"
         >
             <Trash2 class="h-4 w-4" />
         </button>
-        <button
-            type="button"
-            class="cursor-grab rounded-md border p-2 transition hover:bg-muted active:cursor-grabbing"
+
+        <div
+            aria-label="Reordenar tarefa"
+            class="drag-handle cursor-grab rounded-md border p-2 transition hover:bg-muted active:cursor-grabbing"
         >
             <GripVertical class="h-4 w-4" />
-        </button>
+        </div>
     </div>
 </template>

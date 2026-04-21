@@ -2,14 +2,15 @@
 import TaskItem from '@/components/features/task/TaskItem.vue';
 import type { Task } from '@/types/task';
 
-defineProps<{
+const props = defineProps<{
     tasks: Task[];
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
     view: [task: Task];
     edit: [task: Task];
     remove: [task: Task];
+    reorder: [tasks: Task[]];
 }>();
 </script>
 
@@ -27,16 +28,23 @@ defineEmits<{
                 Nenhuma tarefa cadastrada ainda.
             </div>
 
-            <ul v-else class="space-y-3">
-                <TaskItem
-                    v-for="task in tasks"
-                    :key="task.id"
-                    :task="task"
-                    @view="$emit('view', task)"
-                    @edit="$emit('edit', task)"
-                    @remove="$emit('remove', task)"
-                />
-            </ul>
+            <Draggable
+                v-else
+                :list="tasks"
+                item-key="id"
+                handle=".drag-handle"
+                class="space-y-3"
+                @end="emit('reorder', tasks)"
+            >
+                <template #item="{ element }">
+                    <TaskItem
+                        :task="element"
+                        @view="$emit('view', element)"
+                        @edit="$emit('edit', element)"
+                        @remove="$emit('remove', element)"
+                    />
+                </template>
+            </Draggable>
         </div>
     </div>
 </template>
