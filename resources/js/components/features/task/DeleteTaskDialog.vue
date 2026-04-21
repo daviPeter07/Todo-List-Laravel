@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
@@ -11,9 +13,11 @@ import type { Task } from '@/types/task';
 defineProps<{
     open: boolean;
     task: Task | null;
+    processing?: boolean;
 }>();
 
 const emit = defineEmits<{
+    confirm: [];
     'update:open': [value: boolean];
 }>();
 </script>
@@ -22,29 +26,28 @@ const emit = defineEmits<{
     <Dialog :open="open" @update:open="emit('update:open', $event)">
         <DialogContent>
             <DialogHeader>
-                <DialogTitle>{{
-                    task?.title ?? 'Detalhes da tarefa'
-                }}</DialogTitle>
+                <DialogTitle>Excluir tarefa</DialogTitle>
                 <DialogDescription>
-                    Visualize as informações completas da tarefa.
+                    Confirme a exclusao da tarefa
+                    <span class="font-medium text-foreground">
+                        {{ task?.title ?? '' }}
+                    </span>
+                    . Esta acao nao pode ser desfeita.
                 </DialogDescription>
             </DialogHeader>
 
-            <div v-if="task" class="space-y-4">
-                <div class="space-y-1">
-                    <p class="text-sm font-medium">Status</p>
-                    <p class="text-sm text-muted-foreground">
-                        {{ task.status }}
-                    </p>
-                </div>
-
-                <div class="space-y-1">
-                    <p class="text-sm font-medium">Descrição</p>
-                    <p class="text-sm text-muted-foreground">
-                        {{ task.description || 'Sem descrição.' }}
-                    </p>
-                </div>
-            </div>
+            <DialogFooter>
+                <Button variant="outline" @click="emit('update:open', false)">
+                    Cancelar
+                </Button>
+                <Button
+                    variant="destructive"
+                    :disabled="processing || !task"
+                    @click="emit('confirm')"
+                >
+                    Excluir
+                </Button>
+            </DialogFooter>
         </DialogContent>
     </Dialog>
 </template>

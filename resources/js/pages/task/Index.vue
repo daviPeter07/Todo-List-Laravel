@@ -19,6 +19,7 @@ const selectedTask = ref<Task | null>(null);
 const detailsOpen = ref(false);
 const formOpen = ref(false);
 const deleteOpen = ref(false);
+const deleteProcessing = ref(false);
 
 const createForm = useForm({
     title: '',
@@ -87,11 +88,16 @@ function submitEdit(payload: {
 function confirmDelete() {
     if (!selectedTask.value) return;
 
+    deleteProcessing.value = true;
+
     router.delete(`/task/${selectedTask.value.id}`, {
         preserveScroll: true,
         onSuccess: () => {
             deleteOpen.value = false;
             selectedTask.value = null;
+        },
+        onFinish: () => {
+            deleteProcessing.value = false;
         },
     });
 }
@@ -149,7 +155,7 @@ function handleReorder(tasks: Task[]) {
     <DeleteTaskDialog
         :open="deleteOpen"
         :task="selectedTask"
-        :processing="false"
+        :processing="deleteProcessing"
         @update:open="deleteOpen = $event"
         @confirm="confirmDelete"
     />

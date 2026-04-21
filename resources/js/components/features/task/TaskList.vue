@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TaskItem from '@/components/features/task/TaskItem.vue';
 import type { Task } from '@/types/task';
+import Draggable from 'vuedraggable';
 
 const props = defineProps<{
     tasks: Task[];
@@ -33,6 +34,7 @@ const emit = defineEmits<{
                 :list="tasks"
                 item-key="id"
                 handle=".drag-handle"
+                tag="ul"
                 class="space-y-3"
                 @end="emit('reorder', tasks)"
             >
