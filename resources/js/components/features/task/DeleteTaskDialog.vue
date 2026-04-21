@@ -28,11 +28,11 @@ const emit = defineEmits<{
             <DialogHeader>
                 <DialogTitle>Excluir tarefa</DialogTitle>
                 <DialogDescription>
-                    Confirme a exclusao da tarefa
+                    Confirme a exclusão da tarefa
                     <span class="font-medium text-foreground">
                         {{ task?.title ?? '' }}
                     </span>
-                    . Esta acao nao pode ser desfeita.
+                    . Esta ação não pode ser desfeita.
                 </DialogDescription>
             </DialogHeader>
 
